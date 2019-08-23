@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Cubos App</string>
+    <string name="movies_title">Movies</string>
+    <string name="first_tab">first_tab</string>
+    <string name="second_tab">second_tab</string>
+    <string name="third_tab">third_tab</string>
+    <string name="forth_tab">forth_tab</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="movie_poster_description">Poster do filme</string>
+    <string name="icon_info_description">Informações sobre o filme</string>
+    <string name="icon_currency_description">Valores do filme</string>
+    <string name="overview_title">Sinopse</string>
+    <string name="info_title">Informações</string>
+    <string name="info_language">Idioma</string>
+    <string name="info_status">Situação</string>
+    <string name="info_runtime">Duração</string>
+    <string name="info_budget">Orçamento</string>
+    <string name="info_revenue">Receita</string>
+    <string name="info_profit">Lucro</string>
+</resources>
