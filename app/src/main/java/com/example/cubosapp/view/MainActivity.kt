@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity(), View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        presenter.initializeView()
     }
 
     override fun onResume() {
@@ -30,16 +31,11 @@ class MainActivity : AppCompatActivity(), View {
     }
 
     override fun initView(genres: List<Genre>){
-        val adapter = TabsFragmentAdapter( supportFragmentManager)
-
         genres.map {it
             tabs_container.addTab(tabs_container.newTab().setText(it.name))
-            adapter.addFragment(MoviesListView(presenter.getTabData(it.id)),it.name)
         }
         tabs_container!!.tabGravity = TabLayout.GRAVITY_FILL
-        moviePagesContainer.adapter = adapter
 
-        moviePagesContainer.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs_container))
         tabs_container.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 moviePagesContainer.currentItem = tab.position
@@ -53,8 +49,13 @@ class MainActivity : AppCompatActivity(), View {
         })
     }
 
-    override fun updateViewData(){
-
+    override fun updateViewData(genres: List<Genre>){
+        val adapter = TabsFragmentAdapter( supportFragmentManager)
+        genres.map {it
+            adapter.addFragment(MoviesListView(presenter.getTabData(it.id)),it.name)
+        }
+        moviePagesContainer.adapter = adapter
+        moviePagesContainer.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs_container))
     }
 
     override fun getSelectedItem(){

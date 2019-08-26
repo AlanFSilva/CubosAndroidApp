@@ -7,9 +7,21 @@ import com.example.cubosapp.model.MainModel
 class MainPresenter (var _mainView: View?): Presenter {
 
     private var _mainModel: Model = MainModel()
+    private var moviesCollection = mutableMapOf( 28 to listOf<MovieCard>(), 18  to listOf<MovieCard>(), 14  to listOf<MovieCard>(), 878  to listOf<MovieCard>() )
 
-    fun onResume() {
-        _mainModel.loadData()
+    init {
+        for (item in moviesCollection) {
+            _mainModel.getData(item.key, 1, ::callBackFetchMovies)
+        }
+    }
+
+    fun initializeView() {
+        var genres = _mainModel.getMoviesGenres()
+        _mainView?.initView(genres)
+    }
+
+    override fun onResume() {
+
     }
 
     fun onDestroy() {
@@ -17,19 +29,21 @@ class MainPresenter (var _mainView: View?): Presenter {
     }
 
     override fun updateDataValue() {
-
+        _mainView?.updateViewData(_mainModel.getMoviesGenres())
     }
 
-    override fun getTabData(id : Int): List<MovieCard> {
-        return _mainModel.getData(id)
+    override fun getTabData(id : Int): List<MovieCard>? {
+        return moviesCollection.get(id)
     }
 
     override fun selectedItem(){
 
     }
 
-    fun getSetTabsContent(){
-        var genres = _mainModel.getMoviesGenres()
-        _mainView?.initView(genres)
+    fun callBackFetchMovies(movies: List<MovieCard>?, id: Int) {
+        if (movies != null) {
+            moviesCollection.put(id, movies)
+            this.updateDataValue()
+        }
     }
 }

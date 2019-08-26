@@ -13,7 +13,7 @@ import com.example.cubosapp.adapter.ListItemAdapter
 import com.example.cubosapp.data.MovieCard
 import androidx.recyclerview.widget.DefaultItemAnimator
 
-class MoviesListView(var movies: List<MovieCard>) : Fragment() {
+class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +22,15 @@ class MoviesListView(var movies: List<MovieCard>) : Fragment() {
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         var fragment = inflater.inflate(R.layout.fragment_movies_list_view, container, false)
-        listMoviesRecycler.setLayoutManager( LinearLayoutManager(getActivity()))
-        var listItemAdapter = ListItemAdapter(movies)
+        return fragment;
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        var layoutManager = LinearLayoutManager(view.context)
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL)
+        listMoviesRecycler.setLayoutManager( layoutManager)
+        var listItemAdapter = ListItemAdapter(movies.orEmpty())
         listMoviesRecycler.setAdapter(listItemAdapter)
         listMoviesRecycler.setItemAnimator(DefaultItemAnimator())
-        return fragment;
     }
 }
