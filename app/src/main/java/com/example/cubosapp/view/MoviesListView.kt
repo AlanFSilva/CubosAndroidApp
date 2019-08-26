@@ -12,6 +12,7 @@ import com.example.cubosapp.R
 import com.example.cubosapp.adapter.ListItemAdapter
 import com.example.cubosapp.data.MovieCard
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 
 class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
 
@@ -26,7 +27,7 @@ class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        var layoutManager = LinearLayoutManager(view.context)
+        var layoutManager = GridLayoutManager (view.context, 2)
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL)
         listMoviesRecycler.setLayoutManager( layoutManager)
         var listItemAdapter = ListItemAdapter(movies.orEmpty())

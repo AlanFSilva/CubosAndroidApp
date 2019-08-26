@@ -1,5 +1,6 @@
 package com.example.cubosapp.adapter
 
+import android.content.Context.WINDOW_SERVICE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cubosapp.data.MovieCard
 import kotlinx.android.synthetic.main.movie_card_item.view.*
-import android.net.Uri
+import com.squareup.picasso.Picasso
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Point
+import android.os.AsyncTask
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import android.widget.ImageView
+import java.io.IOException
+import java.io.InputStream
+import java.net.URL
+import android.view.Display
+
+
+
 
 class ListItemAdapter(private val movies: List<MovieCard>): RecyclerView.Adapter<ListItemAdapter.MovieViewHolder>() {
 
@@ -35,14 +50,22 @@ class ListItemAdapter(private val movies: List<MovieCard>): RecyclerView.Adapter
         }
 
         override fun onClick(v: View?) {
-            Log.d("RecyclerView", "CLICK!")
+
         }
 
         fun bindMovies(newMovie: MovieCard) {
             this.movies = newMovie
-            val uri = Uri.parse("http://image.tmdb.org/t/p/w185/"+newMovie.poster_path)
-            view.cardItemPoster.setImageURI(uri)
+            val uri = "https://image.tmdb.org/t/p/w342/"+newMovie.poster_path
+            val size = Point().also {
+                    (view.context.getSystemService(WINDOW_SERVICE) as WindowManager)
+                        .defaultDisplay
+                        .apply { getSize(it) }
+                }
+
             view.cardItemText.text = newMovie.title
+            Picasso.get().load(uri).into(view.cardItemPoster)
+            view.cardItemPoster.getLayoutParams().height = ((size.x / 16) *12)
+            view.cardItemPoster.requestLayout()
         }
     }
 }
