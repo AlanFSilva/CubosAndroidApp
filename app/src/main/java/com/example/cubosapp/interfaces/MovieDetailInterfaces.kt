@@ -9,12 +9,12 @@ interface MovieDetailInterfaces {
     }
 
     interface Presenter {
-        fun getDataValue()
         fun backPage()
+        fun fetchMovieData(movieId : Int)
     }
 
     interface Model {
-        fun getData(movieId : Int) : MovieDetail
+        fun getData(id : Int, callBackFetchMovie: (movies: MovieDetail?)-> Unit)
     }
 
 }

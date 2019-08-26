@@ -22,12 +22,12 @@ class ApiCaller {
 
 
     fun getMoviesByGender(genre: Int, page: Int, callBack: (movies: List<MovieCard>?, id : Int) -> Unit) {
-        var response = TmdbService.getMoviesByGenre(genre, apiKey, langauge, page)
+        val response = TmdbService.getMoviesByGenre(genre, apiKey, langauge, page)
         response.enqueue( object : Callback<MovieListRequest?>{
             override fun onResponse(call: Call<MovieListRequest?>?, response: Response<MovieListRequest?>?) {
                 response?.let {
-                    val response: MovieListRequest? = it.body()
-                    callBack(response?.results, genre)
+                    val data: MovieListRequest? = it.body()
+                    callBack(data?.results, genre)
                 }
             }
             override fun onFailure(call: Call<MovieListRequest?>?, t: Throwable?) {
@@ -36,12 +36,33 @@ class ApiCaller {
         })
     }
 
-    fun getMoviesByTitle(title: String, page: Int) {
-        var data = TmdbService.getMoviesByTitle(title, apiKey, langauge, page).execute().body()
-
+    fun getMoviesByTitle(title: String, page: Int, callBack: (movies: List<MovieCard>?) -> Unit) {
+        val response = TmdbService.getMoviesByTitle(title, apiKey, langauge, page)
+        response.enqueue( object : Callback<MovieListRequest?>{
+            override fun onResponse(call: Call<MovieListRequest?>?, response: Response<MovieListRequest?>?) {
+                response?.let {
+                    val data: MovieListRequest? = it.body()
+                    callBack(data?.results)
+                }
+            }
+            override fun onFailure(call: Call<MovieListRequest?>?, t: Throwable?) {
+                Log.e("onFailure error", t?.message)
+            }
+        })
     }
 
-    fun getMovieDetail(movieId: String): MovieDetail?  {
-         return TmdbService.getMovieDetails(movieId, apiKey, langauge).execute().body()
+    fun getMovieDetail(movieId: Int, callBack: (movies: MovieDetail?) -> Unit) {
+        val response = TmdbService.getMovieDetails(movieId, apiKey, langauge)
+        response.enqueue( object : Callback<MovieDetail?>{
+            override fun onResponse(call: Call<MovieDetail?>?, response: Response<MovieDetail?>?) {
+                response?.let {
+                    val data: MovieDetail? = it.body()
+                    callBack(data)
+                }
+            }
+            override fun onFailure(call: Call<MovieDetail?>?, t: Throwable?) {
+                Log.e("onFailure error", t?.message)
+            }
+        })
     }
 }

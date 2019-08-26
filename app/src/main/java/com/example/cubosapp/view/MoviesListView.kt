@@ -1,5 +1,6 @@
 package com.example.cubosapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,16 +23,23 @@ class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        var fragment = inflater.inflate(R.layout.fragment_movies_list_view, container, false)
-        return fragment;
+        val fragment = inflater.inflate(R.layout.fragment_movies_list_view, container, false)
+        return fragment
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        var layoutManager = GridLayoutManager (view.context, 2)
+        val layoutManager = GridLayoutManager (view.context, 2)
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL)
         listMoviesRecycler.setLayoutManager( layoutManager)
-        var listItemAdapter = ListItemAdapter(movies.orEmpty())
+        val listItemAdapter = ListItemAdapter(movies.orEmpty(), {movieCard : MovieCard -> onItemClick(movieCard) })
         listMoviesRecycler.setAdapter(listItemAdapter)
         listMoviesRecycler.setItemAnimator(DefaultItemAnimator())
+    }
+
+    fun onItemClick(movie : MovieCard ){
+        val movieDetail = Intent(this.context, MovieDetailActivity::class.java)
+        movieDetail.putExtra("MovieId" , movie.id)
+        movieDetail.putExtra("MovieTitle", movie.title)
+        startActivity(movieDetail)
     }
 }

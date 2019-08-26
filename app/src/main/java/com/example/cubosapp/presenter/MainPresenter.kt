@@ -16,7 +16,7 @@ class MainPresenter (var _mainView: View?): Presenter {
     }
 
     fun initializeView() {
-        var genres = _mainModel.getMoviesGenres()
+        val genres = _mainModel.getMoviesGenres()
         _mainView?.initView(genres)
     }
 
@@ -40,7 +40,7 @@ class MainPresenter (var _mainView: View?): Presenter {
 
     }
 
-    fun callBackFetchMovies(movies: List<MovieCard>?, id: Int) {
+    private fun callBackFetchMovies(movies: List<MovieCard>?, id: Int) {
         if (movies != null) {
             moviesCollection.put(id, movies)
             this.updateDataValue()

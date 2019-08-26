@@ -14,5 +14,5 @@ interface RetroMoviesInterface {
     fun getMoviesByTitle( @Query("query") searchTerm: String, @Query("api_key") apiKey: String, @Query("language") language: String, @Query("page") page: Int, @Query("include_adult") censorship: Boolean = false) : Call<MovieListRequest>
 
     @GET("movie/{movieId}")
-    fun getMovieDetails(@Path("movieId") movieId: String, @Query("api_key") apiKey: String, @Query("language") language: String, @Query("append_to_response") append: String = "videos") : Call<MovieDetail>
+    fun getMovieDetails(@Path("movieId") movieId: Int, @Query("api_key") apiKey: String, @Query("language") language: String, @Query("append_to_response") append: String = "videos") : Call<MovieDetail>
 }
