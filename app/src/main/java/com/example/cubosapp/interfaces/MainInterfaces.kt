@@ -7,15 +7,15 @@ interface MainInterfaces {
 
     interface View {
         fun initView(genres : List<Genre>)
-        fun updateViewData(genres: List<Genre>)
+        fun setViewData(genre: Genre?)
+        fun updateViewData(genre: Genre?)
         fun getSelectedItem()
         fun searchMovie()
     }
 
     interface Presenter {
-        fun onResume()
-        fun updateDataValue()
-        fun selectedItem()
+        fun updateDataValue(key : Int)
+        fun setDataValue(key : Int)
         fun getTabData(id : Int) : List<MovieCard>?
     }
 

@@ -2,6 +2,7 @@ package com.example.cubosapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.viewpager.widget.PagerAdapter
 import com.example.cubosapp.interfaces.MainInterfaces.*
 import com.example.cubosapp.R
 import com.example.cubosapp.adapter.TabsFragmentAdapter
@@ -13,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), View {
 
     private var presenter = MainPresenter(this)
+    private var pagerAdapter  = TabsFragmentAdapter(supportFragmentManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +24,6 @@ class MainActivity : AppCompatActivity(), View {
 
     override fun onResume() {
         super.onResume()
-        presenter.onResume()
     }
 
     override fun onDestroy() {
@@ -34,8 +35,10 @@ class MainActivity : AppCompatActivity(), View {
         genres.map {it
             tabs_container.addTab(tabs_container.newTab().setText(it.name))
         }
-        tabs_container!!.tabGravity = TabLayout.GRAVITY_FILL
+        moviePagesContainer.adapter = pagerAdapter
+        moviePagesContainer.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs_container))
 
+        tabs_container!!.tabGravity = TabLayout.GRAVITY_FILL
         tabs_container.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 moviePagesContainer.currentItem = tab.position
@@ -49,13 +52,15 @@ class MainActivity : AppCompatActivity(), View {
         })
     }
 
-    override fun updateViewData(genres: List<Genre>){
-        val adapter = TabsFragmentAdapter( supportFragmentManager)
-        genres.map {it
-            adapter.addFragment(MoviesListView(presenter.getTabData(it.id)),it.name)
+    override fun setViewData(genre: Genre?){
+        if (genre != null) {
+            pagerAdapter.addFragment(MoviesListView(presenter.getTabData(genre.id)),genre.name)
+            moviePagesContainer.adapter = pagerAdapter
         }
-        moviePagesContainer.adapter = adapter
-        moviePagesContainer.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs_container))
+    }
+
+    override fun updateViewData(genre: Genre?){
+
     }
 
     override fun getSelectedItem(){
