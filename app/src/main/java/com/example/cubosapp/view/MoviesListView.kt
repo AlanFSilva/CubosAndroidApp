@@ -21,10 +21,6 @@ class MoviesListView(var movies: ArrayList<MovieCard>?, val genre: Int, val onSc
     private var listItemAdapter : ListItemAdapter? = null
     private var lastVisibleItemPosition: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_movies_list_view, container, false)
@@ -33,11 +29,11 @@ class MoviesListView(var movies: ArrayList<MovieCard>?, val genre: Int, val onSc
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val layoutManager = GridLayoutManager (view.context, 2)
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL)
-        listMoviesRecycler.setLayoutManager( layoutManager)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        listMoviesRecycler.layoutManager = layoutManager
         listItemAdapter = ListItemAdapter(ArrayList(movies.orEmpty()), {movieCard : MovieCard -> onItemClick(movieCard) })
-        listMoviesRecycler.setAdapter(listItemAdapter)
-        listMoviesRecycler.setItemAnimator(DefaultItemAnimator())
+        listMoviesRecycler.adapter = listItemAdapter
+        listMoviesRecycler.itemAnimator = DefaultItemAnimator()
         listMoviesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 val totalItemCount = recyclerView.layoutManager!!.itemCount

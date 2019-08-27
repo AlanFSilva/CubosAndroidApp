@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), View {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         (menu.findItem(R.id.search_menu).actionView as SearchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo( ComponentName(this.context,SearchActivity::class.java)))
-            setIconifiedByDefault(false)
+            isIconifiedByDefault = false
         }
         return true
     }

@@ -5,7 +5,7 @@ import com.example.cubosapp.data.MovieCard
 import com.example.cubosapp.data.MovieListRequest
 import com.example.cubosapp.interfaces.SearchInterfaces.*
 
-class SearchModel(): Model {
+class SearchModel : Model {
     private var apiCaller = ApiCaller()
     private var currentPage = 1
     private var totalPages = 1
@@ -33,8 +33,8 @@ class SearchModel(): Model {
 
     fun callBackFetchData(request: MovieListRequest?, callBackFetchMovies: (List<MovieCard>?) -> Unit) {
         if(request != null){
-            moviesList = ArrayList(request?.results!!)
-            totalPages = request?.total_pages!!
+            moviesList = ArrayList(request.results)
+            totalPages = request.total_pages
             currentPage +=1
             callBackFetchMovies(moviesList)
         }

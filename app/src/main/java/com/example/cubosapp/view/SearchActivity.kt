@@ -44,7 +44,7 @@ class SearchActivity : AppCompatActivity(), SearchInterfaces.View {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         (menu.findItem(R.id.search_menu).actionView as SearchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo( componentName))
-            setIconifiedByDefault(false)
+            isIconifiedByDefault = false
         }
         return true
     }
@@ -57,7 +57,7 @@ class SearchActivity : AppCompatActivity(), SearchInterfaces.View {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             val query = intent.getStringExtra(SearchManager.QUERY)
-            supportActionBar?.setTitle(query)
+            supportActionBar?.title = query
             presenter.searchMovie(query)
             isLoadingData = true
         }
