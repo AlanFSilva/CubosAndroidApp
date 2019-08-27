@@ -14,8 +14,12 @@ import com.example.cubosapp.adapter.ListItemAdapter
 import com.example.cubosapp.data.MovieCard
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
-class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
+class MoviesListView(var movies: ArrayList<MovieCard>?, val genre: Int, val onScrollChanged: (id: Int) -> Unit) : Fragment() {
+
+    private var listItemAdapter : ListItemAdapter? = null
+    private var lastVisibleItemPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +35,23 @@ class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
         val layoutManager = GridLayoutManager (view.context, 2)
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL)
         listMoviesRecycler.setLayoutManager( layoutManager)
-        val listItemAdapter = ListItemAdapter(ArrayList(movies.orEmpty()), {movieCard : MovieCard -> onItemClick(movieCard) })
+        listItemAdapter = ListItemAdapter(ArrayList(movies.orEmpty()), {movieCard : MovieCard -> onItemClick(movieCard) })
         listMoviesRecycler.setAdapter(listItemAdapter)
         listMoviesRecycler.setItemAnimator(DefaultItemAnimator())
+        listMoviesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                val totalItemCount = recyclerView.layoutManager!!.itemCount
+                if (totalItemCount <= (lastVisibleItemPosition + 20)) {
+                    onScrollChanged(genre)
+                }
+                lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+            }
+        })
+    }
+
+    fun updateData(data: List<MovieCard>){
+        movies?.addAll(data)
+        listItemAdapter?.addAll(data)
     }
 
     fun onItemClick(movie : MovieCard ){

@@ -1,63 +1,65 @@
 package com.example.cubosapp.presenter
 
+import com.example.cubosapp.data.Genre
 import com.example.cubosapp.data.MovieCard
 import com.example.cubosapp.interfaces.MainInterfaces.*
 import com.example.cubosapp.model.MainModel
 
 class MainPresenter (var _mainView: View?): Presenter {
 
+    private var moviesGenres = listOf( Genre(id = 28, name = "Ação"), Genre(id = 18,name = "Drama"), Genre(id = 14, name = "Fantasia"), Genre(id = 878, name = "Ficção"))
     private var _mainModel: Model = MainModel()
-    private var moviesCollection = mutableMapOf( 28 to listOf<MovieCard>(), 18  to listOf<MovieCard>(), 14  to listOf<MovieCard>(), 878  to listOf<MovieCard>() )
     private var dataIndex = 0
-
-
-    fun initializeView() {
-        getInitialData(moviesCollection.keys.elementAt(dataIndex))
-        val genres = _mainModel.getMoviesGenres()
-        _mainView?.initView(genres)
-    }
-
-    private fun getInitialData(key: Int){
-        _mainModel.getData(key, 1, ::callBackFetchMovies)
-    }
+    private var updateId = 0
 
     fun onDestroy() {
         _mainView = null
     }
 
-    override fun setDataValue(key : Int) {
-        val genre = _mainModel.getMoviesGenres().find{item -> item.id == key}
-        _mainView?.setViewData(genre)
+    fun initializeView() {
+        getInitialData(moviesGenres[dataIndex].id)
+        _mainView?.initView(moviesGenres)
     }
 
-    override fun updateDataValue(key : Int) {
-        val genre = _mainModel.getMoviesGenres().find{item -> item.id == key}
-        _mainView?.updateViewData(genre)
+    private fun getInitialData(key: Int){
+        _mainModel.fetchData(key, ::callBackFetchMovies)
     }
 
-    override fun getTabData(id : Int): List<MovieCard>? {
-        return moviesCollection.get(id)
+    override fun getLimitData(genre: Int): Boolean {
+        return _mainModel.getLimitData(genre)
     }
 
-    private fun callBackFetchMovies(movies: List<MovieCard>?, id: Int) {
+    override fun getDataValue(key: Int){
+        updateId = key
+        _mainModel.updateData(key, ::callBackUpdateMovies)
+    }
+
+    override fun setDataValue(movies: List<MovieCard>) {
+        val genre = moviesGenres[dataIndex-1]
+        _mainView?.setViewData(genre, movies)
+    }
+
+    override fun updateDataValue(movies: List<MovieCard>?) {
+        _mainView?.updateViewData(updateId, movies)
+    }
+
+    private fun callBackFetchMovies(movies: List<MovieCard>?) {
         if (movies != null) {
             dataIndex +=1
-            moviesCollection.put(id, movies)
-            setDataValue(id)
-            if (dataIndex < moviesCollection.size){
-                val key = moviesCollection.keys.elementAt(dataIndex)
+            setDataValue(movies)
+            if (dataIndex < moviesGenres.size){
+                val key = moviesGenres[dataIndex].id
                 getInitialData(key)
             }
         }
         else{
-            getInitialData(moviesCollection.keys.elementAt(dataIndex))
+            getInitialData(moviesGenres[dataIndex].id)
         }
     }
 
-    private fun callBackUpdateMovies(movies: List<MovieCard>?, id: Int) {
+    private fun callBackUpdateMovies(movies: List<MovieCard>?) {
         if (movies != null) {
-            moviesCollection.put(id, movies)
-            setDataValue(id)
+            updateDataValue(movies)
         }
     }
 }

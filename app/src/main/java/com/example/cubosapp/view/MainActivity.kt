@@ -11,6 +11,7 @@ import com.example.cubosapp.interfaces.MainInterfaces.*
 import com.example.cubosapp.R
 import com.example.cubosapp.adapter.TabsFragmentAdapter
 import com.example.cubosapp.data.Genre
+import com.example.cubosapp.data.MovieCard
 import com.example.cubosapp.presenter.MainPresenter
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity(), View {
 
     private var presenter = MainPresenter(this)
     private var pagerAdapter  = TabsFragmentAdapter(supportFragmentManager)
+    private var isLoadingData = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,22 +71,25 @@ class MainActivity : AppCompatActivity(), View {
         })
     }
 
-    override fun setViewData(genre: Genre?){
-        if (genre != null) {
-            pagerAdapter.addFragment(MoviesListView(presenter.getTabData(genre.id)),genre.name)
+    override fun setViewData(genre: Genre?, movies: List<MovieCard>?){
+        if (movies != null && genre != null) {
+            pagerAdapter.addFragment(MoviesListView(ArrayList(movies), genre.id, ::onScrollStateChanged),genre.name, genre.id)
             moviePagesContainer.adapter = pagerAdapter
         }
     }
 
-    override fun updateViewData(genre: Genre?){
-
+    override fun updateViewData(id: Int, movies: List<MovieCard>?){
+        if (movies != null) {
+            pagerAdapter.updateFragmentData(id, movies)
+            isLoadingData = false
+        }
     }
 
-    override fun getSelectedItem(){
-
+    fun onScrollStateChanged( genre: Int) {
+        if(!presenter.getLimitData(genre) && !isLoadingData){
+            isLoadingData = true
+            presenter.getDataValue(genre)
+        }
     }
 
-    override fun searchMovie(){
-
-    }
 }

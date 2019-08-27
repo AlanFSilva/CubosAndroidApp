@@ -46,7 +46,6 @@ class SearchModel(): Model {
             currentPage +=1
             callBackFetchMovies(request.results)
         }
-
     }
 
 }

@@ -21,13 +21,13 @@ class ApiCaller {
    private val TmdbService = retrofit.create(RetroMoviesInterface::class.java)
 
 
-    fun getMoviesByGender(genre: Int, page: Int, callBack: (movies: List<MovieCard>?, id : Int) -> Unit) {
+    fun getMoviesByGender(genre: Int, page: Int, callBack: (movies: MovieListRequest?, id : Int, callBack: (List<MovieCard>?) -> Unit) -> Unit, presenterCallBack: (List<MovieCard>?) -> Unit) {
         val response = TmdbService.getMoviesByGenre(genre, apiKey, langauge, page)
         response.enqueue( object : Callback<MovieListRequest?>{
             override fun onResponse(call: Call<MovieListRequest?>?, response: Response<MovieListRequest?>?) {
                 response?.let {
                     val data: MovieListRequest? = it.body()
-                    callBack(data?.results, genre)
+                    callBack(data, genre, presenterCallBack)
                 }
             }
             override fun onFailure(call: Call<MovieListRequest?>?, t: Throwable?) {

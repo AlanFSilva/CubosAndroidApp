@@ -7,23 +7,22 @@ interface MainInterfaces {
 
     interface View {
         fun initView(genres : List<Genre>)
-        fun setViewData(genre: Genre?)
-        fun updateViewData(genre: Genre?)
-        fun getSelectedItem()
-        fun searchMovie()
+        fun setViewData(genre: Genre?, movies: List<MovieCard>?)
+        fun updateViewData(genre: Int, movies: List<MovieCard>?)
     }
 
     interface Presenter {
-        fun updateDataValue(key : Int)
-        fun setDataValue(key : Int)
-        fun getTabData(id : Int) : List<MovieCard>?
+
+        fun getDataValue(key: Int)
+        fun setDataValue(movies: List<MovieCard>)
+        fun updateDataValue(movies: List<MovieCard>?)
+        fun getLimitData(genre: Int): Boolean
     }
 
     interface Model {
-        fun getData(id : Int, page: Int, callBackFetchMovies: (movies: List<MovieCard>?, genre: Int)-> Unit)
-        fun initModelData(callBackFetchMovies : (movies: List<MovieCard>?, genre: Int)-> Unit)
-        fun getMoviesGenres() : List<Genre>
-
+        fun fetchData( genre: Int, callBackFetchMovies: (List<MovieCard>?) -> Unit)
+        fun updateData( genre: Int, callBackFetchMovies: (List<MovieCard>?) -> Unit)
+        fun getLimitData(genre: Int): Boolean
     }
 
 }
