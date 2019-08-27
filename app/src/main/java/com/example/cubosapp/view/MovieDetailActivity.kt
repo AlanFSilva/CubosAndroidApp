@@ -26,7 +26,7 @@ class MovieDetailActivity : AppCompatActivity(), View {
         val movieId = intent?.getIntExtra("MovieId", 0)
         val title = intent?.getStringExtra("MovieTitle")
 
-        setSupportActionBar(toolbar)
+        //setSupportActionBar(toolbar)
         supportActionBar?.setTitle(title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         movieId?.let { presenter.fetchMovieData(it) }

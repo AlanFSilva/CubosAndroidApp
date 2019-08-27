@@ -31,7 +31,7 @@ class MoviesListView(var movies: List<MovieCard>?) : Fragment() {
         val layoutManager = GridLayoutManager (view.context, 2)
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL)
         listMoviesRecycler.setLayoutManager( layoutManager)
-        val listItemAdapter = ListItemAdapter(movies.orEmpty(), {movieCard : MovieCard -> onItemClick(movieCard) })
+        val listItemAdapter = ListItemAdapter(ArrayList(movies.orEmpty()), {movieCard : MovieCard -> onItemClick(movieCard) })
         listMoviesRecycler.setAdapter(listItemAdapter)
         listMoviesRecycler.setItemAnimator(DefaultItemAnimator())
     }

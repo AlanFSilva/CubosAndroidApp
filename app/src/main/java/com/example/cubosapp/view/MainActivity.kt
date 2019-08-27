@@ -1,8 +1,12 @@
 package com.example.cubosapp.view
 
+import android.app.SearchManager
+import android.content.ComponentName
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.viewpager.widget.PagerAdapter
+import android.view.Menu
+import android.widget.SearchView
 import com.example.cubosapp.interfaces.MainInterfaces.*
 import com.example.cubosapp.R
 import com.example.cubosapp.adapter.TabsFragmentAdapter
@@ -19,11 +23,24 @@ class MainActivity : AppCompatActivity(), View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.setTitle(R.string.movies_title)
         presenter.initializeView()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.search_menu).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo( ComponentName(this.context,SearchActivity::class.java)))
+            setIconifiedByDefault(false)
+        }
+        return true
+    }
+
+    override fun onSearchRequested(): Boolean {
+        startSearch(null, false, null, true)
+        return true
     }
 
     override fun onDestroy() {

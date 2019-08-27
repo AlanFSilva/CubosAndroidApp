@@ -36,13 +36,13 @@ class ApiCaller {
         })
     }
 
-    fun getMoviesByTitle(title: String, page: Int, callBack: (movies: List<MovieCard>?) -> Unit) {
+    fun getMoviesByTitle(title: String, page: Int, callBack: (movies: MovieListRequest?, callBack: (List<MovieCard>?) -> Unit) -> Unit, presenterCallBack: (List<MovieCard>?) -> Unit) {
         val response = TmdbService.getMoviesByTitle(title, apiKey, langauge, page)
         response.enqueue( object : Callback<MovieListRequest?>{
             override fun onResponse(call: Call<MovieListRequest?>?, response: Response<MovieListRequest?>?) {
                 response?.let {
                     val data: MovieListRequest? = it.body()
-                    callBack(data?.results)
+                    callBack(data, presenterCallBack)
                 }
             }
             override fun onFailure(call: Call<MovieListRequest?>?, t: Throwable?) {

@@ -16,10 +16,14 @@ import androidx.core.content.ContextCompat.startActivity
 import com.example.cubosapp.view.MovieDetailActivity
 
 
-class ListItemAdapter(private val movies: List<MovieCard>, val clickListener: (MovieCard) -> Unit): RecyclerView.Adapter<ListItemAdapter.MovieViewHolder>() {
+class ListItemAdapter(private var movies: ArrayList<MovieCard>, val clickListener: (MovieCard) -> Unit): RecyclerView.Adapter<ListItemAdapter.MovieViewHolder>() {
 
     override fun getItemCount(): Int {
         return movies.size
+    }
+
+    fun addAll(newMovies : List<MovieCard>){
+        movies.addAll(newMovies)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
